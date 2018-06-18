@@ -74,12 +74,12 @@ public class BallSearch extends PerPlayer {
 
         void update(final HulksMessage message) {
             // Reset leader after 3 Seconds
-            if (lastUpdate.plusSeconds(3).isAfter(LocalDateTime.now())) {
+            if (lastUpdate.plusSeconds(3).isBefore(LocalDateTime.now())) {
                 leader = -1;
                 searcher = -1;
             }
             // Leader election: Smallest PlayerNumber
-            if (leader == -1 || leader <= message.playerNum) {
+            if (leader == -1 || message.playerNum <= leader) {
                 lastUpdate = LocalDateTime.now();
                 leader = message.playerNum;
                 searcher = message.message.hulks.getMostWisePlayerNumber();
@@ -93,6 +93,18 @@ public class BallSearch extends PerPlayer {
 
         List<SearchPosition> getCurrentSearchPoses() {
             return currentSearchPoses;
+        }
+
+        public LocalDateTime getLastUpdate() {
+            return lastUpdate;
+        }
+
+        public int getLeader() {
+            return leader;
+        }
+
+        public int getSearcher() {
+            return searcher;
         }
     }
 }
